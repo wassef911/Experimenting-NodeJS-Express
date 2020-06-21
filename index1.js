@@ -31,12 +31,14 @@ const processFile = (contents) => {
   // could've used console.log but it comes with unneeded proccesing.
 };
 
+const BASE_PATH = path.resolve(process.env.BASE_PATH || __dirname);
+
 if (args.help) {
   printHelp();
 } else if (args.in || args._.includes("-")) {
   getStdin().then(processFile).catch(error);
 } else if (args.file) {
-  let filePath = path.resolve(args.file);
+  let filePath = path.join(BASE_PATH, args.file);
   fs.readFile(filePath, "utf-8", (err, contents) => {
     // used utf-8 encoding on the binary buffer returned from readFile
     if (err) {
