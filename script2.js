@@ -12,10 +12,11 @@ const BASE_PATH = path.resolve(process.env.BASE_PATH || __dirname);
 
 const printHelp = () => {
   /* i'll do my best to keep this updated, no promises tho' */
-  console.log("index1 usage : ");
+  console.log("script1 usage : ./script2 --arg ");
   console.log("");
   console.log("--help               print this help");
   console.log("--file={FILENAME}    process the file");
+  console.log("cat {FILENAME} | ./script1.js --in  process the file");
   console.log("");
 };
 
