@@ -16,14 +16,14 @@ let OUT_FILE = path.join(BASE_PATH, "out.txt");
 
 const printHelp = () => {
   /* i'll do my best to keep this updated, no promises tho' */
-  console.log("script2 usage : ./script2 --arg ");
+  console.log("script3 usage : ./script3 --arg ");
   console.log("");
   console.log("--help               print this help.");
   console.log("--file={FILENAME}    process the file.");
   console.log("--out                pipe output to the screen.");
   console.log("--compress           gzip the outputed file.");
   console.log("");
-  console.log("cat {FILENAME} | ./script2.js --in  process the piped stream.");
+  console.log("cat {FILENAME} | ./script3.js --in  process the piped stream.");
   console.log("");
 };
 
