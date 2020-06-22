@@ -1,0 +1,24 @@
+{
+  "name": "CL-Scripting-NodeJS",
+  "version": "1.0.0",
+  "description": "### `script3 usage : ./script3 [--args]`",
+  "main": "script1.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wassef911/CL-Scripting-NodeJS.git"
+  },
+  "keywords": [],
+  "author": "Wassef911",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wassef911/CL-Scripting-NodeJS/issues"
+  },
+  "homepage": "https://github.com/wassef911/CL-Scripting-NodeJS#readme",
+  "dependencies": {
+    "esm": "^3.2.25"
+  }
+}
