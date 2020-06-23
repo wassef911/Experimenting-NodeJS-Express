@@ -5,6 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const Transform = require("stream").Transform;
 const zlib = require("zlib");
+const CAF = require("caf");
 
 const args = require("minimist")(process.argv.slice(2), {
   boolean: ["help", "in", "out", "compress"],
@@ -35,37 +36,57 @@ const error = (msg, includeHelp = false) => {
   }
 };
 
-const processFile = (inStream) => {
+const streamComplete = (stream) => {
+  return new Promise((res) => {
+    stream.on("end", res);
+  });
+};
+
+function* processFile(signal, inStream) {
   let outStream = inStream;
   let upperStream = new Transform({
     transform(chunk, enc, next) {
       this.push(chunk.toString().toUpperCase());
-      setTimeout(next, 400);
+      setTimeout(next, 100);
     },
   });
   outStream = outStream.pipe(upperStream);
   let targetStream;
-  if (args.compress) {
+  if (args.compress && !args.out) {
     let gzipStream = zlib.createGzip();
     outStream = outStream.pipe(gzipStream);
     OUT_FILE = `${OUT_FILE}.gz`;
   }
-  if (args.out) {
+  if (args.out && !args.compress) {
     targetStream = process.stdout;
   } else {
     targetStream = fs.createWriteStream(OUT_FILE);
   }
   outStream.pipe(targetStream);
-};
+
+  signal.pr.catch(function f() {
+    outStream.unpipe(targetStream);
+    outStream.destroy();
+  });
+  yield streamComplete(outStream);
+}
+
+processFile = CAF(processFile);
 
 if (args.help) {
   printHelp();
 } else if (args.in || args._.includes("-")) {
-  processFile(process.stdin);
+  let tooLong = CAF.timeout(3, "Sorry it took too long bruh !");
+  processFile(tooLong, process.stdin);
 } else if (args.file) {
   let filePath = path.join(BASE_PATH, args.file);
   let stream = fs.createReadStream(filePath);
-  processFile(stream);
+  let tooLong = CAF.timeout(3, "Sorry it took too long bruh !");
+  processFile(tooLong, stream)
+    .then(() => {
+      console.log("Completed");
+    })
+    .catch(error);
 } else {
   error("Incorrect usage bruh.", true);
 }
