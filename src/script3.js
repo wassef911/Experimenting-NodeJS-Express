@@ -76,12 +76,12 @@ processFile = CAF(processFile);
 if (args.help) {
   printHelp();
 } else if (args.in || args._.includes("-")) {
-  let tooLong = CAF.timeout(3, "Sorry it took too long bruh !");
+  let tooLong = CAF.timeout(15, "Sorry it took too long bruh !");
   processFile(tooLong, process.stdin);
 } else if (args.file) {
   let filePath = path.join(BASE_PATH, args.file);
   let stream = fs.createReadStream(filePath);
-  let tooLong = CAF.timeout(3, "Sorry it took too long bruh !");
+  let tooLong = CAF.timeout(15, "Sorry it took too long bruh !");
   processFile(tooLong, stream)
     .then(() => {
       console.log("Completed");

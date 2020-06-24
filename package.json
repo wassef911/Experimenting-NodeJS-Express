@@ -20,6 +20,7 @@
   "homepage": "https://github.com/wassef911/CL-Scripting-NodeJS#readme",
   "dependencies": {
     "caf": "^9.0.0",
-    "esm": "^3.2.25"
+    "esm": "^3.2.25",
+    "sqlite3": "^4.2.0"
   }
 }
