@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-var util = require("util");
-var path = require("path");
-var http = require("http");
+const util = require("util");
+const path = require("path");
+const http = require("http");
 
-var sqlite3 = require("sqlite3");
-var staticAlias = require("node-static-alias");
+const sqlite3 = require("sqlite3");
+const staticAlias = require("node-static-alias");
 
 // ************************************
 
