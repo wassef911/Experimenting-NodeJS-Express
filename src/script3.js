@@ -1,92 +1,104 @@
 #!/usr/bin/env node
 
-const util = require("util");
-const fs = require("fs");
-const path = require("path");
-const Transform = require("stream").Transform;
-const zlib = require("zlib");
-const CAF = require("caf");
+var util = require("util");
+var path = require("path");
+var http = require("http");
 
-const args = require("minimist")(process.argv.slice(2), {
-  boolean: ["help", "in", "out", "compress"],
-  string: ["file"],
+var sqlite3 = require("sqlite3");
+var staticAlias = require("node-static-alias");
+
+// ************************************
+
+const DB_PATH = path.join(__dirname, "my.db");
+const WEB_PATH = path.join(__dirname, "web");
+const HTTP_PORT = 8039;
+
+var delay = util.promisify(setTimeout);
+
+var myDB = new sqlite3.Database(DB_PATH);
+var SQL3 = {
+  run(...args) {
+    return new Promise(function c(resolve, reject) {
+      myDB.run(...args, function onResult(err) {
+        if (err) reject(err);
+        else resolve(this);
+      });
+    });
+  },
+  get: util.promisify(myDB.get.bind(myDB)),
+  all: util.promisify(myDB.all.bind(myDB)),
+  exec: util.promisify(myDB.exec.bind(myDB)),
+};
+
+var fileServer = new staticAlias.Server(WEB_PATH, {
+  cache: 100,
+  serverInfo: "Node Workshop: ex5",
+  alias: [
+    {
+      match: /^\/(?:index\/?)?(?:[?#].*$)?$/,
+      serve: "index.html",
+      force: true,
+    },
+    {
+      match: /^\/js\/.+$/,
+      serve: "<% absPath %>",
+      force: true,
+    },
+    {
+      match: /^\/(?:[\w\d]+)(?:[\/?#].*$)?$/,
+      serve: function onMatch(params) {
+        return `${params.basename}.html`;
+      },
+    },
+    {
+      match: /[^]/,
+      serve: "404.html",
+    },
+  ],
 });
 
-const BASE_PATH = path.resolve(process.env.BASE_PATH || __dirname);
-let OUT_FILE = path.join(BASE_PATH, "out.txt");
+var httpserv = http.createServer(handleRequest);
 
-const printHelp = () => {
-  /* i'll do my best to keep this updated, no promises tho' */
-  console.log("script3 usage : ./script3 --arg ");
-  console.log("");
-  console.log("--help               print this help.");
-  console.log("--file={FILENAME}    process the file.");
-  console.log("--out                pipe output to the screen.");
-  console.log("--compress           gzip the outputed file.");
-  console.log("");
-  console.log("cat {FILENAME} | ./script3.js --in  process the piped stream.");
-  console.log("");
-};
+main();
 
-const error = (msg, includeHelp = false) => {
-  console.log(msg);
-  if (includeHelp) {
-    console.log("");
-    printHelp();
-  }
-};
+// ************************************
 
-const streamComplete = (stream) => {
-  return new Promise((res) => {
-    stream.on("end", res);
-  });
-};
-
-function* processFile(signal, inStream) {
-  let outStream = inStream;
-  let upperStream = new Transform({
-    transform(chunk, enc, next) {
-      this.push(chunk.toString().toUpperCase());
-      setTimeout(next, 100);
-    },
-  });
-  outStream = outStream.pipe(upperStream);
-  let targetStream;
-  if (args.compress && !args.out) {
-    let gzipStream = zlib.createGzip();
-    outStream = outStream.pipe(gzipStream);
-    OUT_FILE = `${OUT_FILE}.gz`;
-  }
-  if (args.out && !args.compress) {
-    targetStream = process.stdout;
-  } else {
-    targetStream = fs.createWriteStream(OUT_FILE);
-  }
-  outStream.pipe(targetStream);
-
-  signal.pr.catch(function f() {
-    outStream.unpipe(targetStream);
-    outStream.destroy();
-  });
-  yield streamComplete(outStream);
+function main() {
+  httpserv.listen(HTTP_PORT);
+  console.log(`Listening on http://localhost:${HTTP_PORT}...`);
 }
 
-processFile = CAF(processFile);
+async function handleRequest(req, res) {
+  if (/\/get-records\b/.test(req.url)) {
+    await delay(1000);
 
-if (args.help) {
-  printHelp();
-} else if (args.in || args._.includes("-")) {
-  let tooLong = CAF.timeout(15, "Sorry it took too long bruh !");
-  processFile(tooLong, process.stdin);
-} else if (args.file) {
-  let filePath = path.join(BASE_PATH, args.file);
-  let stream = fs.createReadStream(filePath);
-  let tooLong = CAF.timeout(15, "Sorry it took too long bruh !");
-  processFile(tooLong, stream)
-    .then(() => {
-      console.log("Completed");
-    })
-    .catch(error);
-} else {
-  error("Incorrect usage bruh.", true);
+    let records = (await getAllRecords()) || [];
+
+    res.writeHead(200, {
+      "Content-Type": "application/json",
+      "Cache-Control": "max-age: 0, no-cache",
+    });
+    res.end(JSON.stringify(records));
+  } else {
+    fileServer.serve(req, res);
+  }
+}
+
+// *************************
+
+async function getAllRecords() {
+  var result = await SQL3.all(
+    `
+		SELECT
+			Something.data AS "something",
+			Other.data AS "other"
+		FROM
+			Something
+			JOIN Other ON (Something.otherID = Other.id)
+		ORDER BY
+			Other.id DESC, Something.data
+		`
+  );
+
+  return result;
 }
