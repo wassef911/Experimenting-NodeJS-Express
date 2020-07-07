@@ -16,7 +16,7 @@ var args = require("minimist")(process.argv.slice(2), {
 
 main().catch(console.error);
 
-var SQL3;
+let SQL3;
 
 async function main() {
   if (!args.other) {
@@ -41,6 +41,7 @@ async function main() {
   };
 
   var initSQL = fs.readFileSync(DB_SQL_PATH, "utf-8");
+  await SQL3.exec(initSQL);
   // TODO: initialize the DB structure
 
   var other = args.other;
@@ -50,9 +51,38 @@ async function main() {
 
   // TODO: insert values and print all records
 
-  error("Oops!");
+  let otherID = await insertOrLookupOther(other);
+  if (otherID) {
+    //TODO
+    return;
+  }
+
+  //error("Oops!");
 }
 
+const insertOrLookupOther = async (other) => {
+  let result = await SQL3.get(
+    `
+      SELECT id
+      FROM other 
+      WHERE data = ?
+    `,
+    other
+  );
+  if (result || result.id) {
+    return result.id;
+  } else {
+    result = await SQL3.run(
+      `
+    INSERT INTO other (data)
+    VALUES(?)`,
+      other
+    );
+    if (result && result.lastID) {
+      return result.lastID;
+    }
+  }
+};
 function error(err) {
   if (err) {
     console.error(err.toString());
