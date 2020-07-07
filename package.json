@@ -1,5 +1,5 @@
 {
-  "name": "CL-Scripting-NodeJS",
+  "name": "CLI-NodeJS",
   "version": "1.0.0",
   "description": "### `script3 usage : ./script3 [--args]`",
   "main": "script1.js",
@@ -13,7 +13,7 @@
   },
   "keywords": [],
   "author": "Wassef911",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/wassef911/CL-Scripting-NodeJS/issues"
   },
@@ -22,7 +22,7 @@
     "caf": "^9.0.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "http": "0.0.1-security",
+    "node-fetch": "^2.6.0",
     "node-static-alias": "^1.1.2",
     "sqlite3": "^4.2.0"
   }
