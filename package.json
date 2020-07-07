@@ -21,6 +21,9 @@
   "dependencies": {
     "caf": "^9.0.0",
     "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "node-static-alias": "^1.1.2",
     "sqlite3": "^4.2.0"
   }
 }
