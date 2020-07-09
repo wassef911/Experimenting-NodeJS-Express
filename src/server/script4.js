@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+//serve http without express
 
 const util = require("util");
 const path = require("path");
@@ -13,7 +14,6 @@ const DB_PATH = path.join(__dirname, "my.db");
 const WEB_PATH = path.join(__dirname, "web");
 const HTTP_PORT = 8039;
 
-var delay = util.promisify(setTimeout);
 const app = express();
 var myDB = new sqlite3.Database(DB_PATH);
 var SQL3 = {
