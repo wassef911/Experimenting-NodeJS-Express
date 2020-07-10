@@ -1,4 +1,4 @@
-(function Ex5() {
+(function showData() {
   var btn;
   var recordsList;
 

@@ -3,17 +3,58 @@
   <head>
     <meta charset="utf-8" />
     <title>Ex5</title>
+    <style type="text/css">
+      body {
+        cursor: default;
+      }
+      table {
+        width: 350px;
+        border-collapse: separate;
+        empty-cells: hide;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      td {
+        padding: 5px;
+        border-style: solid;
+        border-width: 1px;
+        border-color: #999999;
+      }
+      td:hover {
+        background-color: black;
+        color: white;
+      }
+      .btn {
+        color: #fff !important;
+        text-transform: uppercase;
+        text-decoration: none;
+        background: #ed3330;
+        padding: 20px;
+        border-radius: 5px;
+        display: inline-block;
+        border: none;
+        transition: all 0.4s ease 0s;
+      }
+      .btn:hover {
+        background: #434343;
+        letter-spacing: 1px;
+        -webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+        -moz-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+        box-shadow: 5px 40px -10px rgba(0, 0, 0, 0.57);
+        transition: all 0.4s ease 0s;
+      }
+    </style>
   </head>
   <body>
     <nav><a href="/">Home</a> | <a href="/about">About</a></nav>
 
-    <h1>Ex5</h1>
+    <h1>SQL3 DATABASE</h1>
     <p>
-      <button rel="js-btn">Fetch Records</button>
+      <button class="btn" rel="js-btn">Fetch DB</button>
     </p>
     <p rel="js-records-list"></p>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/json2html/1.2.0/json2html.min.js"></script>
-    <script src="js/sc5-web.js"></script>
+    <script src="js/showData.js"></script>
   </body>
 </html>

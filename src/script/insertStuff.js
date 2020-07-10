@@ -1,14 +1,20 @@
 #!/usr/bin/env node
-// insert stuff
-const init = require("./database/initDB");
+// insert stuff to db
+
+/*************************** INIT ******************************/
 const yargs = require("yargs");
 let f;
-const { SQL3 } = init();
+const initDatabase = require("../database/initDB");
 
-main().catch(console.error);
+/**************************** EXECUTION *****************************/
+initDatabase()
+  .then((SQL3) => {
+    main(SQL3);
+  })
+  .catch(console.error);
 
-// ************************************
-async function main() {
+/*************************** DEFINITION  ******************************/
+async function main(SQL3) {
   yargs.command({
     command: "add",
     describe: "add your name to the db.",
@@ -23,11 +29,11 @@ async function main() {
       f = async () => {
         const other = argv.name;
         const something = Math.trunc(Math.random() * 1e9);
-        const otherID = await getOrInsertOtherID(other);
+        const otherID = await getOrInsertOtherID(SQL3, other);
         if (otherID != null) {
-          let inserted = await insertSomething(something, otherID);
+          let inserted = await insertSomething(SQL3, something, otherID);
           if (inserted) {
-            let records = await getAllRecords();
+            let records = await getAllRecords(SQL3);
             console.table(records);
             return;
           }
@@ -38,9 +44,8 @@ async function main() {
     },
   });
 }
-// ***********
 
-const getOrInsertOtherID = async (other) => {
+const getOrInsertOtherID = async (SQL3, other) => {
   let result = await SQL3.get(
     `
 		SELECT
@@ -73,7 +78,7 @@ const getOrInsertOtherID = async (other) => {
   }
 };
 
-const insertSomething = async (something, otherID) => {
+const insertSomething = async (SQL3, something, otherID) => {
   const result = await SQL3.run(
     `
 		INSERT INTO
@@ -91,7 +96,7 @@ const insertSomething = async (something, otherID) => {
   }
 };
 
-const getAllRecords = async () => {
+const getAllRecords = async (SQL3) => {
   const result = await SQL3.all(
     `
 		SELECT
@@ -114,3 +119,5 @@ const error = (err) => {
     console.log("");
   }
 };
+
+module.exports = getAllRecords;

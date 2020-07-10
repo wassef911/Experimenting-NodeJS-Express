@@ -1,49 +1,36 @@
 #!/usr/bin/env node
 //serve http without express
 
-const util = require("util");
+/*************************** INIT ******************************/
 const path = require("path");
 const http = require("http");
-
 const express = require("express");
-const sqlite3 = require("sqlite3");
 
+const initDatabase = require("../database/initDB");
+const getAllRecords = require("../script/insertStuff");
 // ************************************
 
-const DB_PATH = path.join(__dirname, "my.db");
 const WEB_PATH = path.join(__dirname, "web");
 const HTTP_PORT = 8039;
 
 const app = express();
-var myDB = new sqlite3.Database(DB_PATH);
-var SQL3 = {
-  run(...args) {
-    return new Promise(function c(resolve, reject) {
-      myDB.run(...args, function onResult(err) {
-        if (err) reject(err);
-        else resolve(this);
-      });
-    });
-  },
-  get: util.promisify(myDB.get.bind(myDB)),
-  all: util.promisify(myDB.all.bind(myDB)),
-  exec: util.promisify(myDB.exec.bind(myDB)),
-};
 
 var httpserv = http.createServer(app);
 
+/**************************** EXECUTION *****************************/
 main();
 
-// ************************************
-
+/*************************** DEFINITION  ******************************/
 function main() {
   defineRoutes();
   httpserv.listen(HTTP_PORT);
   console.log(`Listening on http://localhost:${HTTP_PORT}...`);
 }
+
 function defineRoutes() {
   app.get("/get-records", async (req, res) => {
-    let records = await getAllRecords();
+    const SQL3 = await initDatabase();
+    let records = await getAllRecords(SQL3);
     res.writeHead(200, {
       "Content-Type": "application/json",
       "Cache-Control": "no-cache",
@@ -71,22 +58,4 @@ function defineRoutes() {
       },
     })
   );
-}
-// *************************
-
-async function getAllRecords() {
-  var result = await SQL3.all(
-    `
-		SELECT
-			Something.data AS "something",
-			Other.data AS "other"
-		FROM
-			Something
-			JOIN Other ON (Something.otherID = Other.id)
-		ORDER BY
-			Other.id DESC, Something.data
-		`
-  );
-
-  return result;
 }

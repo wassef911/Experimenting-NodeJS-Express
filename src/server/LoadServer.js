@@ -1,18 +1,18 @@
+//load the server with 500 child procs
+
+/*************************** INIT ******************************/
 var util = require("util");
 var childProc = require("child_process");
-//load the server
-
-// ************************************
 
 const HTTP_PORT = 8039;
-const MAX_CHILDREN = 5;
+const MAX_CHILDREN = 500;
 
 var delay = util.promisify(setTimeout);
 
+/**************************** EXECUTION *****************************/
 main().catch(console.error);
 
-// ************************************
-
+/*************************** DEFINITION  ******************************/
 async function main() {
   console.log(`Load testing http://localhost:${HTTP_PORT}...`);
 
@@ -22,7 +22,7 @@ async function main() {
     let children = [];
 
     for (let i = 0; i < MAX_CHILDREN; i++) {
-      children.push(childProc.spawn("node", ["sc5-child.js"]));
+      children.push(childProc.spawn("node", ["childProc.js"]));
     }
 
     let resps = children.map((child) => {

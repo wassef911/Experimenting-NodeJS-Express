@@ -11,7 +11,7 @@ const fs = require("fs");
 const path = require("path");
 const CAF = require("caf");
 const yargs = require("yargs");
-let { log, processFile, BASEPATH } = require("./scriptUtils");
+let { log, processFile, BASEPATH } = require("./CompUtils");
 var timeout = CAF.timeout(1000, "Took too long.");
 const flags = {
   compress: {
@@ -34,7 +34,7 @@ main().catch((err) => {
   log(err);
 });
 
-/************************** MAIN DEFINITION *******************************/
+/************************** DEFINITION *******************************/
 async function main() {
   processFile = CAF(processFile);
 
