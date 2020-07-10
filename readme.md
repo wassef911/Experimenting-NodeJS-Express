@@ -2,18 +2,18 @@
 
 ### `Experimenting with NodeJs`
 
-## _the repos contains :_
+## _this repository contains :_
 
-[Compression script.]()
+[Compression script.](https://github.com/wassef911/CLI-NodeJS/blob/master/src/script/comp.js)
 
-[Script to insert data to SQLite 3 db.]()
+[Script to insert data to SQLite 3 db.](https://github.com/wassef911/CLI-NodeJS/blob/master/src/script/insertStuff.js)
 
-[Basic html5 website.]()
+[Basic html5 website.](https://github.com/wassef911/CLI-NodeJS/tree/master/src/server/web)
 
-[Vanilla NodeJs server.]()
+[Vanilla NodeJs server.](https://github.com/wassef911/CLI-NodeJS/blob/master/src/server/NodeServer.js)
 
-[Express server.]()
+[Express server.](https://github.com/wassef911/CLI-NodeJS/blob/master/src/server/Express.js)
 
-[Script to over load the server with child procs.]()
+[Script to over load the server with child procs.](https://github.com/wassef911/CLI-NodeJS/blob/master/src/server/LoadServer.js)
 
-![screenshot](link)
+![screenshot](https://github.com/wassef911/CLI-NodeJS/blob/master/screenshot.png?raw=true)
