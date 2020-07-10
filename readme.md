@@ -1,7 +1,5 @@
 # Experimenting-NodeJS
 
-### `Experimenting with NodeJs`
-
 ## _this repository contains :_
 
 [Compression script.](https://github.com/wassef911/CLI-NodeJS/blob/master/src/script/comp.js)
