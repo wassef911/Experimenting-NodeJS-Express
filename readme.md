@@ -2,7 +2,7 @@
 
 ## _this repository contains :_
 
-[Compression script.](https://github.com/wassef911/CLI-NodeJS/blob/master/src/script/comp.js)
+[Compression script.](https://github.com/wassef911/CLI-NodeJS/blob/master/src/script/compress.js)
 
 [Script to insert data to SQLite 3 db.](https://github.com/wassef911/CLI-NodeJS/blob/master/src/script/insertStuff.js)
 

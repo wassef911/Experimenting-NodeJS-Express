@@ -1,28 +1,29 @@
 #!/usr/bin/env node
 // insert stuff to db
 
-/*************************** INIT ******************************/
-const yargs = require("yargs");
-let f;
-const initDatabase = require("../database/initDB");
+/** ************************* INIT ***************************** */
+const yargs = require('yargs');
 
-/**************************** EXECUTION *****************************/
+let f;
+const initDatabase = require('../database/initDB');
+
+/** ************************** EXECUTION **************************** */
 initDatabase()
   .then((SQL3) => {
     main(SQL3);
   })
   .catch(console.error);
 
-/*************************** DEFINITION  ******************************/
+/** ************************* DEFINITION  ***************************** */
 async function main(SQL3) {
   yargs.command({
-    command: "add",
-    describe: "add your name to the db.",
+    command: 'add',
+    describe: 'add your name to the db.',
     builder: {
       name: {
-        describe: "your name",
+        describe: 'your name',
         demandOption: true,
-        type: "string",
+        type: 'string',
       },
     },
     handler(argv) {
@@ -31,13 +32,13 @@ async function main(SQL3) {
         const something = Math.trunc(Math.random() * 1e9);
         const otherID = await getOrInsertOtherID(SQL3, other);
         if (otherID != null) {
-          let inserted = await insertSomething(SQL3, something, otherID);
+          const inserted = await insertSomething(SQL3, something, otherID);
           if (inserted) {
-            let records = await getAllRecords(SQL3);
+            const records = await getAllRecords(SQL3);
             console.table(records);
             return;
           }
-          error("Oops!");
+          error('Oops!');
         }
       };
       f();
@@ -55,26 +56,25 @@ const getOrInsertOtherID = async (SQL3, other) => {
 		WHERE
 			data = ?
 		`,
-    other
+    other,
   );
 
   if (result != null) {
     return result.id;
-  } else {
-    result = await SQL3.run(
-      `
+  }
+  result = await SQL3.run(
+    `
 			INSERT INTO
 				Other
 			(data)
 			VALUES
 				(?)
 			`,
-      other
-    );
+    other,
+  );
 
-    if (result != null && result.changes > 0) {
-      return result.lastID;
-    }
+  if (result != null && result.changes > 0) {
+    return result.lastID;
   }
 };
 
@@ -88,7 +88,7 @@ const insertSomething = async (SQL3, something, otherID) => {
 			(?, ?)
 		`,
     otherID,
-    something
+    something,
   );
 
   if (result != null && result.changes > 0) {
@@ -107,7 +107,7 @@ const getAllRecords = async (SQL3) => {
 			JOIN Other ON (Something.otherID = Other.id)
 		ORDER BY
 			Other.id DESC, Something.data
-		`
+		`,
   );
 
   return result;
@@ -116,7 +116,7 @@ const getAllRecords = async (SQL3) => {
 const error = (err) => {
   if (err) {
     console.error(err.toString());
-    console.log("");
+    console.log('');
   }
 };
 
