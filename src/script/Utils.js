@@ -5,12 +5,14 @@ const zlib = require('zlib');
 const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
+const pdfreader = require('pdfreader');
 
 const BASEPATH = path.resolve(process.env.BASEPATH || __dirname);
-const BASEOUTPATH = path.resolve(
+const BASE_OUT_PATH = path.resolve(
   process.env.BASEOUTPATH || path.join(__dirname, 'outfiles'),
 );
-let OUTPATH = path.join(BASEOUTPATH, 'out.txt');
+let OUTPATH = path.join(BASE_OUT_PATH, 'out.txt');
+const OUTPATH_PDF = path.join(BASE_OUT_PATH, 'out.mp3');
 
 /** ************************* FUNCTIONS ***************************** */
 const log = (str) => {
@@ -20,6 +22,18 @@ const log = (str) => {
 const streamComplete = (stream) => new Promise((res) => {
   stream.on('end', res);
 });
+
+function convertFile(signal, fileName, argv) {
+  if (argv.format === 'mp3') {
+    new pdfreader.PdfReader().parseFileItems(fileName, (err, item) => {
+      if (err) log(err);
+      else if (!item) log('');
+      else if (item.text) console.log(item.text);
+    });
+  }
+
+  log('hi');
+}
 
 function* compressFile(signal, inputStream, argv) {
   let stream = inputStream;
@@ -63,4 +77,6 @@ function* compressFile(signal, inputStream, argv) {
 }
 
 /** ************************* EXPORT ***************************** */
-module.exports = { log, compressFile, BASEPATH };
+module.exports = {
+  log, compressFile, convertFile, BASEPATH,
+};

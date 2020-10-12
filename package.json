@@ -25,7 +25,9 @@
     "express": "^4.17.1",
     "node-fetch": "^2.6.0",
     "node-static-alias": "^1.1.2",
-    "sqlite3": "^5.0.0"
+    "pdfreader": "^1.2.6",
+    "sqlite3": "^5.0.0",
+    "yargs": "^16.0.3"
   },
   "devDependencies": {
     "eslint": "^7.11.0",
