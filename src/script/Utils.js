@@ -5,7 +5,9 @@ const zlib = require('zlib');
 const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
+
 const pdfreader = require('pdfreader');
+const { ToMP3 } = require('./say');
 
 const BASEPATH = path.resolve(process.env.BASEPATH || __dirname);
 const BASE_OUT_PATH = path.resolve(
@@ -28,10 +30,9 @@ function convertFile(signal, fileName, argv) {
     new pdfreader.PdfReader().parseFileItems(fileName, (err, item) => {
       if (err) log(err);
       else if (!item) log('');
-      else if (item.text) console.log(item.text);
+      else if (item.text) ToMP3(item.text);
     });
   }
-
   log('hi');
 }
 
