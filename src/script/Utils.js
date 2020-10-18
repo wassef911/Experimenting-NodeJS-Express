@@ -5,6 +5,7 @@ const zlib = require('zlib');
 const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
+const ttsf = require('text-to-speech-file');
 
 const pdfreader = require('pdfreader');
 const { ToMP3 } = require('./say');
@@ -30,7 +31,7 @@ function convertFile(signal, fileName, argv) {
     new pdfreader.PdfReader().parseFileItems(fileName, (err, item) => {
       if (err) log(err);
       else if (!item) log('');
-      else if (item.text) ToMP3(item.text);
+      else if (item.text) ttsf.synthesize(item.text, `${BASE_OUT_PATH}/sample-speech.mp3`);
     });
   }
   log('hi');

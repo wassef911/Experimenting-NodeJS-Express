@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/wassef911/CL-Scripting-NodeJS#readme",
   "dependencies": {
-    "@google-cloud/text-to-speech": "^3.1.1",
     "caf": "^9.0.0",
     "chalk": "^4.1.0",
     "core-util-is": "^1.0.2",
@@ -29,6 +28,7 @@
     "node-static-alias": "^1.1.2",
     "pdfreader": "^1.2.6",
     "sqlite3": "^5.0.0",
+    "text-to-speech-file": "^0.3.2",
     "yargs": "^16.0.3"
   },
   "devDependencies": {

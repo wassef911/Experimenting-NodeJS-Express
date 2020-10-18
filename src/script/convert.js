@@ -8,6 +8,7 @@ const path = require('path');
 const fs = require('fs');
 const yargs = require('yargs');
 const CAF = require('caf');
+
 const { log, BASEPATH, convertFile } = require('./Utils');
 
 const timeout = CAF.timeout(2000, 'Took too long to convert.');
