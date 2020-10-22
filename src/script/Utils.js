@@ -1,11 +1,9 @@
 #!/usr/bin/env node
-
 const { Transform } = require('stream');
 const zlib = require('zlib');
 const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
-const ttsf = require('text-to-speech-file');
 
 const pdfreader = require('pdfreader');
 const { ToMP3 } = require('./say');
@@ -26,16 +24,18 @@ const streamComplete = (stream) => new Promise((res) => {
   stream.on('end', res);
 });
 
-function convertFile(signal, fileName, argv) {
+const convertFile = (signal, fileName, argv) => {
   if (argv.format === 'mp3') {
+    ToMP3();
     new pdfreader.PdfReader().parseFileItems(fileName, (err, item) => {
       if (err) log(err);
       else if (!item) log('');
-      else if (item.text) ttsf.synthesize(item.text, `${BASE_OUT_PATH}/sample-speech.mp3`);
+      else if (item.text) {
+        console.log('hi');
+      }
     });
-  }
-  log('hi');
-}
+  } else { console.log('convert format not supported'); }
+};
 
 function* compressFile(signal, inputStream, argv) {
   let stream = inputStream;
