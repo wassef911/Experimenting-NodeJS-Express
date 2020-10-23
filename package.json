@@ -24,7 +24,7 @@
     "core-util-is": "^1.0.2",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "node-static-alias": "^1.1.2",
     "pdfreader": "^1.2.6",
     "sqlite3": "^5.0.0",
