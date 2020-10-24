@@ -26,13 +26,11 @@ const streamComplete = (stream) => new Promise((res) => {
 
 const convertFile = async (signal, fileName, argv) => {
   if (argv.format === 'mp3') {
-    await ToMP3('Freddie Mercury (born Farrokh Bulsara; 5 September 1946 – 24 November 1991)[2] was a British singer, songwriter, record producer, and lead vocalist of the rock band Queen. Regarded as one of the greatest lead singers in the history of rock music, he was known for his flamboyant stage persona and four-octave vocal range. Mercury defied the conventions of a rock frontman, with his highly theatrical style influencing the artistic direction of Queen.');
-    new pdfreader.PdfReader().parseFileItems(fileName, (err, item) => {
-      if (err) log(err);
-      else if (!item) log('');
-      else if (item.text) {
-        console.log('hi');
-      }
+    const out = await ToMP3('Freddie Mercury (born Farrokh Bulsara; 5 September 1946 – 24 November 1991)[2] was a British singer, songwriter, record producer, and lead vocalist of the rock band Queen. Regarded as one of the greatest lead singers in the history of rock music, he was known for his flamboyant stage persona and four-octave vocal range. Mercury defied the conventions of a rock frontman, with his highly theatrical style influencing the artistic direction of Queen.');
+    await fs.writeFile(`${OUTPATH_PDF}`, out, () => {});
+    await new pdfreader.PdfReader().parseFileItems(fileName, (err, item) => {
+      if (!item) console.log();
+      else if (item.text) console.log(item.text);
     });
   } else { console.log('convert format not supported'); }
 };
